@@ -1,0 +1,100 @@
+[build-system]
+requires = ["setuptools>=42.0"]
+build-backend = "setuptools.build_meta"
+
+
+[tool.bumpver]
+current_version = "23.1.0"
+version_pattern = "YY.MM.PATCH[PYTAGNUM]"
+commit_message = "Bump version: {old_version} -> {new_version}"
+commit = true
+tag = true
+push = false
+
+[tool.bumpver.file_patterns]
+"setup.py" = [
+    'version="{version}",$'
+]
+"pyproject.toml" = [
+    'current_version = "{version}"'
+]
+"src/runner_demo/__init__.py" = [
+    '^__version__ = "{version}"$'
+]
+"VERSION" = [
+    "{version}"
+]
+"LICENSE" = [
+    "Copyright (c) YYYY",
+]
+
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+
+[tool.coverage.run]
+branch = true
+source = ["runner_demo"]
+dynamic_context = "test_function"
+
+[tool.coverage.paths]
+source = [
+	"src/runner_demo",
+	".tox/*/lib/python*/site-packages/runner_demo",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+	"pragma: no cover",
+	"def __repr__",
+	"if self.debug:",
+	"if settings.DEBUG",
+	"raise AssertionError",
+	"raise NotImplementedError",
+	"raise TypeError",
+	"if 0:",
+	"if __name__ == .__main__.:",
+]
+precision = 2
+show_missing = true
+
+
+[tool.isort]
+profile = "black"
+src_paths = ["src", "test"]
+
+
+[tool.mypy]
+namespace_packages = true
+plugins = [
+	"mypy_zope:plugin",
+]
+
+
+[tool.pylint.master]
+ignore = [".git", "ve", "tests"]
+jobs = 4
+persistent = true
+suggestion-mode = true
+
+[tool.pylint.messages_control]
+disable = [
+    "missing-docstring",
+	"too-few-public-methods",
+]
+
+[tool.pylint.reports]
+output-format = "text"
+reports = false
+score = false
+
+[tool.pylint.basic]
+good-names=["ch", "fd", "id", "k", "l", "m", "n", "_"]
+
+[tool.pylint.format]
+max-line-length = 88
+
+[tool.pylint.miscellaneous]
+notes=["FIXME", "XXX", "TODO"]
